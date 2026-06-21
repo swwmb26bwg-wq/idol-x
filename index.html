@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idol X</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+    <!-- ホーム -->
+    <div id="homePage" class="page active">
+
+        <div class="topbar">
+            <h2>X</h2>
+        </div>
+
+        <div class="post-box">
+            <textarea id="tweetInput" placeholder="今何してる？"></textarea>
+
+<label for="tweetImages" class="image-btn">
+    <img src="images/photo.png" alt="画像">
+</label>
+
+<input
+    type="file"
+    id="tweetImages"
+    multiple
+    accept="image/*"
+    hidden
+>
+<div id="imagePreview"></div>
+
+            <button id="postBtn">投稿する</button>
+        </div>
+
+        <div id="posts"></div>
+
+    </div>
+
+    <!-- 通知 -->
+    <div id="notificationsPage" class="page">
+
+        <div class="topbar">
+            <h2>通知</h2>
+        </div>
+
+        <div id="notifications"></div>
+
+    </div>
+
+    <!-- プロフィール -->
+    <div id="profilePage" class="page">
+
+        <div class="profile-header">
+
+            <label>
+                <input type="file" id="headerUpload" hidden accept="image/*">
+                <img id="headerImage" src="" alt="">
+            </label>
+
+            <label>
+                <input type="file" id="iconUpload" hidden accept="image/*">
+                <img id="profileIcon" src="" alt="">
+            </label>
+
+        </div>
+
+        <div class="profile-info">
+
+            <input id="nameInput" value="annzu">
+
+            <input id="idInput" value="@annzu_official">
+
+            <textarea id="bioInput">こんにちは💜</textarea>
+
+
+<div class="follow-stats">
+    <span id="followingCount">12</span> フォロー
+
+    <span id="followersCount">100000</span> フォロワー
+</div>
+                        <button id="saveProfile">
+                プロフィール保存
+            </button>
+<h3 class="profile-post-title">投稿</h3>
+
+<div id="profilePosts"></div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 下部タブ -->
+
+<nav class="bottom-nav">
+
+    <button data-page="homePage">
+        <img src="images/home.png" alt="ホーム">
+    </button>
+
+    <button data-page="notificationsPage">
+        <img src="images/bell.png" alt="通知">
+    </button>
+
+    <button data-page="profilePage">
+        <img src="images/profile.png" alt="プロフィール">
+    </button>
+
+</nav>
+
+<script src="script.js"></script>
+
+</body>
+</html>

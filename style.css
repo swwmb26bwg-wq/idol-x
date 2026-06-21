@@ -1,0 +1,301 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+body{
+    background:#f5f8fa;
+    display:flex;
+    justify-content:center;
+}
+
+.app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    background:white;
+    padding-bottom:70px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.topbar{
+    position:sticky;
+    top:0;
+    background:white;
+    padding:15px;
+    border-bottom:1px solid #ddd;
+    z-index:10;
+}
+
+.topbar h2{
+    font-size:20px;
+}
+
+.post-box{
+    padding:15px;
+    border-bottom:1px solid #ddd;
+}
+
+.post-box textarea{
+    width:100%;
+    height:100px;
+    resize:none;
+    border:none;
+    outline:none;
+    font-size:16px;
+}
+
+.post-box input[type=file]{
+    margin-top:10px;
+}
+
+#postBtn{
+    width:100%;
+    margin-top:10px;
+    border:none;
+    background:#1d9bf0;
+    color:white;
+    padding:12px;
+    border-radius:999px;
+    font-weight:bold;
+}
+
+.post{
+    padding:15px;
+    border-bottom:1px solid #eee;
+}
+
+.post-header{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.post-header img{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.post-name{
+    font-weight:bold;
+}
+
+.post-id{
+    color:gray;
+    font-size:14px;
+}
+
+.post-content{
+    margin-top:10px;
+    white-space:pre-wrap;
+}
+
+.post-images{
+    margin-top:10px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:5px;
+}
+
+.post-images img{
+    width:100%;
+    border-radius:12px;
+    object-fit:cover;
+    max-height:220px;
+}
+
+.post-stats{
+    display:flex;
+    justify-content:space-around;
+    margin-top:15px;
+    color:#666;
+    font-size:14px;
+}
+
+.profile-header{
+    position:relative;
+}
+
+#headerImage{
+    width:100%;
+    height:180px;
+    background:#cfd9de;
+    object-fit:cover;
+    display:block;
+}
+
+#profileIcon{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    border:4px solid white;
+    position:absolute;
+    left:15px;
+    bottom:-45px;
+    background:#ddd;
+    object-fit:cover;
+}
+
+.profile-info{
+    padding:60px 15px 15px;
+}
+
+.profile-info input,
+.profile-info textarea{
+    width:100%;
+    padding:5px 0;
+    border:none;
+    outline:none;
+    background:transparent;
+}
+
+.profile-info textarea{
+
+    resize:none;
+}
+
+#saveProfile{
+    border:1px solid #d0d7de;
+    background:white;
+    color:#536471;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:13px;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+.followers{
+    margin-top:15px;
+}
+
+#notifications{
+    padding:15px;
+}
+
+.notice{
+    padding:15px 0;
+    border-bottom:1px solid #eee;
+}
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    width:100%;
+    max-width:430px;
+    display:flex;
+    background:white;
+    border-top:1px solid #ddd;
+}
+
+.bottom-nav button{
+    flex:1;
+    border:none;
+    background:white;
+    padding:15px;
+    font-size:22px;
+}.delete-btn{
+    border:none;
+    background:none;
+    font-size:22px;
+    cursor:pointer;
+    color:#536471;
+    padding:5px;
+}
+.follow-stats{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+    font-size:15px;
+    align-items:center;
+}
+
+.follow-stats span{
+    font-weight:bold;
+}
+.image-btn{
+    display:inline-block;
+    font-size:24px;
+    cursor:pointer;
+    margin-top:10px;
+    color:#1d9bf0;
+}
+
+.image-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    color:#1d9bf0;
+    cursor:pointer;
+}
+#imagePreview{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:5px;
+    margin-top:10px;
+}
+
+#imagePreview img{
+    width:100%;
+    border-radius:12px;
+    max-height:180px;
+    object-fit:cover;
+}
+
+.bottom-nav img{
+    width:40px;
+    height:40px;
+}
+
+.image-btn img{
+    width:42px;
+    height:42px;
+}
+
+.post-stats{
+    display:flex;
+    justify-content:space-around;
+    margin-top:15px;
+}
+
+.stat{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    cursor:pointer;
+}
+
+.stat-icon{
+    width:28px;
+    height:28px;
+    object-fit:contain;
+}
+
+.notice{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:15px 0;
+    border-bottom:1px solid #eee;
+}
+
+.notice-icon{
+    width:32px;
+    height:32px;
+    object-fit:contain;
+    flex-shrink:0;
+}

@@ -1,4 +1,4 @@
-localStorage.clear();
+//localStorage.clear();
 //localStorage.removeItem("notifications");
 
 const pages = document.querySelectorAll(".page");

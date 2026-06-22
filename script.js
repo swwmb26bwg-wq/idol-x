@@ -1,4 +1,4 @@
-//localStorage.clear();
+localStorage.clear();
 //localStorage.removeItem("notifications");
 
 const pages = document.querySelectorAll(".page");
@@ -21,9 +21,9 @@ const headerUpload = document.getElementById("headerUpload");
 const nameInput = document.getElementById("nameInput");
 const idInput = document.getElementById("idInput");
 const bioInput = document.getElementById("bioInput");
-const saveProfileBtn = document.getElementById("saveProfile");
 
-let followers = Number(localStorage.getItem("followers")) || 100000;
+
+let followers = Number(localStorage.getItem("followers")) || 10;
 
 const profilePosts =
 document.getElementById("profilePosts");
@@ -61,16 +61,7 @@ tweetImages.addEventListener("change", () => {
 
 });
 
-const fanComments = [
-    "かわいすぎる😭💜",
-    "今日もビジュ最高！",
-    "会いたいよ〜🥹",
-    "投稿ありがとう💜",
-    "大好き！！",
-    "天才アイドル😭",
-    "ずっと応援してる💜",
-    "今日も最高です✨"
-];
+
 
 const fanNames = [
     "lumi_01",
@@ -121,9 +112,24 @@ function random(min,max){
 
 function createPost(content, images){
 
-    const likes = random(3000,20000);
-    const rts = random(200,3000);
-    const replies = random(50,800);
+    let likes = random(
+        Math.floor(followers * 0.2),
+        Math.floor(followers * 2)
+    );
+
+    if(Math.random() < 0.03){
+        likes *= random(5,15);
+    }
+
+    const rts = random(
+        Math.floor(likes * 0.05),
+        Math.floor(likes * 0.3)
+    );
+
+    const replies = random(
+        Math.floor(likes * 0.01),
+        Math.floor(likes * 0.1)
+    );
 
     const post = document.createElement("div");
     post.className = "post";
@@ -138,10 +144,10 @@ function createPost(content, images){
 <div class="post-header">
     <img src="${profileIcon.src}">
     
-    <div style="flex:1;">
-        <div class="post-name">${nameInput.value} ☑️</div>
-        <div class="post-id">${idInput.value}</div>
-    </div>
+<div style="flex:1;" class="post-user">
+    <span class="post-name">${nameInput.value}</span>
+    <span class="post-id">${idInput.value}</span>
+</div>
 
     <button class="delete-btn">⋯</button>
 </div>
@@ -170,24 +176,9 @@ function createPost(content, images){
     </span>
 
 </div>
-    `;
+`;
 
-    const replyBtn = post.querySelector(".reply-btn");
 
-    replyBtn.addEventListener("click",()=>{
-
-        let comments = "";
-
-        for(let i=0;i<8;i++){
-            comments +=
-            fanNames[random(0,fanNames.length-1)] +
-            " : " +
-            fanComments[random(0,fanComments.length-1)] +
-            "\n";
-        }
-
-        alert(comments);
-    });
     
     const deleteBtn = post.querySelector(".delete-btn");
 
@@ -303,13 +294,18 @@ function finishPost(images){
         images
     );
 
-    let gain = random(50,500);
+let gain = random(-1,3);
 
-    if(Math.random() < 0.15){
-        gain += random(1000,5000);
-    }
+if(Math.random() < 0.05){
+    gain += random(5,15);
+}
 
-    followers += gain;
+followers += gain;
+
+if(followers < 0){
+    followers = 0;
+}
+
     saveFollowers();
 
     addNotification(
@@ -332,23 +328,7 @@ function finishPost(images){
     tweetImages.value = "";
 }
 
-saveProfileBtn.addEventListener("click",()=>{
 
-    const profile = {
-        name:nameInput.value,
-        id:idInput.value,
-        bio:bioInput.value,
-        icon:profileIcon.src,
-        header:headerImage.src
-    };
-
-    localStorage.setItem(
-        "profile",
-        JSON.stringify(profile)
-    );
-
-    alert("プロフィールを保存しました！");
-});
 
 const savedProfile =
 JSON.parse(
@@ -380,6 +360,7 @@ iconUpload.addEventListener("change",e=>{
 
     reader.onload = ev=>{
         profileIcon.src = ev.target.result;
+        saveProfile();
     };
 
     reader.readAsDataURL(file);
@@ -395,6 +376,7 @@ headerUpload.addEventListener("change",e=>{
 
     reader.onload = ev=>{
         headerImage.src = ev.target.result;
+        saveProfile();
     };
 
     reader.readAsDataURL(file);
@@ -406,3 +388,22 @@ if(savedProfilePosts){
     profilePosts.innerHTML =
     savedProfilePosts;
 }
+
+function saveProfile() {
+    const profile = {
+        name: nameInput.value,
+        id: idInput.value,
+        bio: bioInput.value,
+        icon: profileIcon.src,
+        header: headerImage.src
+    };
+
+    localStorage.setItem(
+        "profile",
+        JSON.stringify(profile)
+    );
+}
+
+nameInput.addEventListener("input", saveProfile);
+idInput.addEventListener("input", saveProfile);
+bioInput.addEventListener("input", saveProfile);

@@ -64,14 +64,18 @@ tweetImages.addEventListener("change", () => {
 
 
 const fanNames = [
-    "lumi_01",
-    "purple_star",
-    "annzu_love",
-    "angel_fan",
-    "kpop_girl",
-    "luv_annzu",
-    "moonlight",
-    "violetfan"
+    "junhui_moon",
+    "ho5hi_kwon",
+    "everyone_woo",
+    "jeonghaniyoo_n",
+    "dk_is_dokyeom",
+    "sound_of_coups",
+    "woozi_universefactory",
+    "vernon_98",
+    "joshu_acoustic",
+    "pledis_boos",
+    "min9yu_k",
+    "xuminghao_o",
 ];
 
 function saveFollowers() {
@@ -131,8 +135,11 @@ function createPost(content, images){
         Math.floor(likes * 0.1)
     );
 
-    const post = document.createElement("div");
-    post.className = "post";
+const post = document.createElement("div");
+post.className = "post";
+
+const postId = Date.now();
+post.dataset.id = postId;
 
     let imageHTML = "";
 
@@ -186,13 +193,21 @@ deleteBtn.addEventListener("click", () => {
 
     if(confirm("この投稿を削除しますか？")){
 
-        post.remove();
+        const id = post.dataset.id;
+
+        document
+            .querySelectorAll(`[data-id="${id}"]`)
+            .forEach(p => p.remove());
 
         localStorage.setItem(
             "posts",
             posts.innerHTML
         );
 
+        localStorage.setItem(
+            "profilePosts",
+            profilePosts.innerHTML
+        );
     }
 
 });
@@ -200,8 +215,34 @@ deleteBtn.addEventListener("click", () => {
 posts.prepend(post);
 
 const profilePost = post.cloneNode(true);
+profilePost.dataset.id = postId;
 
 profilePosts.prepend(profilePost);
+
+const profileDeleteBtn =
+    profilePost.querySelector(".delete-btn");
+
+profileDeleteBtn.addEventListener("click", () => {
+
+    if(confirm("この投稿を削除しますか？")) {
+
+        const id = profilePost.dataset.id;
+
+        document
+            .querySelectorAll(`[data-id="${id}"]`)
+            .forEach(p => p.remove());
+
+        localStorage.setItem(
+            "posts",
+            posts.innerHTML
+        );
+
+        localStorage.setItem(
+            "profilePosts",
+            profilePosts.innerHTML
+        );
+    }
+});
 
 localStorage.setItem(
     "posts",
@@ -225,22 +266,29 @@ function attachEvents() {
 
     document.querySelectorAll(".delete-btn").forEach(btn => {
 
-        btn.onclick = () => {
+btn.onclick = () => {
 
-            const post = btn.closest(".post");
+    const post = btn.closest(".post");
+    const id = post.dataset.id;
 
-            if(confirm("この投稿を削除しますか？")) {
+    if(confirm("この投稿を削除しますか？")) {
 
-                post.remove();
+        document
+            .querySelectorAll(`[data-id="${id}"]`)
+            .forEach(p => p.remove());
 
-                localStorage.setItem(
-                    "posts",
-                    posts.innerHTML
-                );
+        localStorage.setItem(
+            "posts",
+            posts.innerHTML
+        );
 
-            }
+        localStorage.setItem(
+            "profilePosts",
+            profilePosts.innerHTML
+        );
+    }
 
-        };
+};
 
     });
 

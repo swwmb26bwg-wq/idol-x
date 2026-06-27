@@ -324,7 +324,7 @@ function finishPost(images){
         images
     );
 
-let gain = random(-1,3);
+let gain = random(1,75);
 
 if(Math.random() < 0.05){
     gain += random(5,15);
@@ -332,9 +332,7 @@ if(Math.random() < 0.05){
 
 followers += gain;
 
-if(followers < 0){
-    followers = 0;
-}
+
 
     saveFollowers();
 

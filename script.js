@@ -7,7 +7,7 @@ const navButtons = document.querySelectorAll(".bottom-nav button");
 const tweetInput = document.getElementById("tweetInput");
 const tweetImages = document.getElementById("tweetImages");
 const postBtn = document.getElementById("postBtn");
-const posts = document.getElementById("posts");
+
 
 const notifications = document.getElementById("notifications");
 const followersCount = document.getElementById("followersCount");
@@ -199,10 +199,6 @@ deleteBtn.addEventListener("click", () => {
             .querySelectorAll(`[data-id="${id}"]`)
             .forEach(p => p.remove());
 
-        localStorage.setItem(
-            "posts",
-            posts.innerHTML
-        );
 
         localStorage.setItem(
             "profilePosts",
@@ -212,7 +208,6 @@ deleteBtn.addEventListener("click", () => {
 
 });
 
-posts.prepend(post);
 
 const profilePost = post.cloneNode(true);
 profilePost.dataset.id = postId;
@@ -233,21 +228,13 @@ profileDeleteBtn.addEventListener("click", () => {
             .forEach(p => p.remove());
 
         localStorage.setItem(
-            "posts",
-            posts.innerHTML
-        );
-
-        localStorage.setItem(
             "profilePosts",
             profilePosts.innerHTML
         );
     }
 });
 
-localStorage.setItem(
-    "posts",
-    posts.innerHTML
-);
+
 
 localStorage.setItem(
     "profilePosts",
@@ -256,11 +243,6 @@ localStorage.setItem(
 }
 
 
-const savedPosts = localStorage.getItem("posts");
-if(savedPosts){
-    posts.innerHTML = savedPosts;
-    attachEvents();
-}
 
 function attachEvents() {
 
@@ -372,11 +354,25 @@ if(followers < 0){
         新しい返信があります`
     );
 
+// 入力欄をリセット
     tweetInput.value = "";
     tweetImages.value = "";
+    imagePreview.innerHTML = "";
+
+    // 投稿完了メッセージ
+    showToast("投稿されました！");
+
 }
+function showToast(message){
+    const toast = document.getElementById("toast");
 
+    toast.textContent = message;
+    toast.classList.add("show");
 
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2000);
+}
 
 const savedProfile =
 JSON.parse(

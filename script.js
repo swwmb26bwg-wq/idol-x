@@ -1,6 +1,7 @@
 //localStorage.clear();
 //localStorage.removeItem("notifications");
 
+
 const pages = document.querySelectorAll(".page");
 const navButtons = document.querySelectorAll(".bottom-nav button");
 
@@ -24,6 +25,10 @@ const bioInput = document.getElementById("bioInput");
 
 
 let followers = Number(localStorage.getItem("followers")) || 10;
+
+let posts =
+JSON.parse(localStorage.getItem("posts")) || [];
+
 
 const profilePosts =
 document.getElementById("profilePosts");
@@ -92,17 +97,27 @@ navButtons.forEach(btn => {
     });
 });
 
+
+
+function savePosts() {
+    localStorage.setItem(
+        "posts",
+        JSON.stringify(posts)
+    );
+}
+
+
 function addNotification(text) {
     const div = document.createElement("div");
     div.className = "notice";
    div.innerHTML = text;
 
-    notifications.prepend(div);
+notifications.prepend(div);
 
-    localStorage.setItem(
-        "notifications",
-        notifications.innerHTML
-    );
+localStorage.setItem(
+    "notifications",
+    notifications.innerHTML
+);
 }
 
 const savedNotifications = localStorage.getItem("notifications");
@@ -114,103 +129,26 @@ function random(min,max){
     return Math.floor(Math.random()*(max-min+1))+min;
 }
 
-function createPost(content, images){
 
-// ===== いいね数 =====
-let likes;
-const likeChance = Math.random();
 
-if (likeChance < 0.50) {
-    // 50%
-    likes = random(
-        0,
-        Math.max(1, Math.floor(followers * 0.1))
-    );
+function createPost(postData){
 
-} else if (likeChance < 0.80) {
-    // 30%
-    likes = random(
-        Math.max(1, Math.floor(followers * 0.1)),
-        Math.max(2, Math.floor(followers * 0.5))
-    );
-
-} else if (likeChance < 0.95) {
-    // 15%
-    likes = random(
-        Math.max(2, Math.floor(followers * 0.5)),
-        Math.max(5, Math.floor(followers * 2))
-    );
-
-} else if (likeChance < 0.99) {
-    // 4%
-    likes = random(
-        Math.max(5, Math.floor(followers * 2)),
-        Math.max(10, Math.floor(followers * 5))
-    );
-
-} else {
-    // 1% バズ
-    likes = random(
-        Math.max(100, Math.floor(followers * 10)),
-        Math.max(500, Math.floor(followers * 50))
-    );
-}
-
-// ===== RT数 =====
-let rts;
-
-if (likes < 10) {
-    rts = random(0, 2);
-
-} else if (likes < 100) {
-    rts = random(
-        Math.floor(likes * 0.03),
-        Math.floor(likes * 0.10)
-    );
-
-} else if (likes < 1000) {
-    rts = random(
-        Math.floor(likes * 0.05),
-        Math.floor(likes * 0.15)
-    );
-
-} else {
-    rts = random(
-        Math.floor(likes * 0.08),
-        Math.floor(likes * 0.20)
-    );
-}
-
-// ===== コメント数 =====
-let replies;
-
-if (likes < 10) {
-    replies = random(0, 1);
-
-} else if (likes < 100) {
-    replies = random(
-        Math.floor(likes * 0.02),
-        Math.floor(likes * 0.08)
-    );
-
-} else if (likes < 1000) {
-    replies = random(
-        Math.floor(likes * 0.03),
-        Math.floor(likes * 0.10)
-    );
-
-} else {
-    replies = random(
-        Math.floor(likes * 0.05),
-        Math.floor(likes * 0.15)
-    );
-}
+const {
+    id,
+    content,
+    images,
+    likes,
+    rts,
+    replies,
+    name = nameInput.value,
+    userId = idInput.value,
+    icon = profileIcon.src
+} = postData;
 
 const post = document.createElement("div");
 post.className = "post";
 
-const postId = Date.now();
-post.dataset.id = postId;
+post.dataset.id = id;
 
     let imageHTML = "";
 
@@ -220,14 +158,17 @@ post.dataset.id = postId;
 
     post.innerHTML = `
 <div class="post-header">
-    <img src="${profileIcon.src}">
+<img src="${icon}">
     
 <div style="flex:1;" class="post-user">
-    <span class="post-name">${nameInput.value}</span>
-    <span class="post-id">${idInput.value}</span>
+
+<span class="post-name">${name}</span>
+<span class="post-id">${userId}</span>
+
 </div>
 
     <button class="delete-btn">⋯</button>
+    
 </div>
 
         <div class="post-content">${content}</div>
@@ -266,22 +207,24 @@ deleteBtn.addEventListener("click", () => {
 
         const id = post.dataset.id;
 
-        document
-            .querySelectorAll(`[data-id="${id}"]`)
-            .forEach(p => p.remove());
 
 
-        localStorage.setItem(
-            "profilePosts",
-            profilePosts.innerHTML
-        );
+posts = posts.filter(post => post.id != id);
+
+savePosts();
+
+document
+    .querySelectorAll(`[data-id="${id}"]`)
+    .forEach(p => p.remove());
     }
 
 });
 
 
+
+
 const profilePost = post.cloneNode(true);
-profilePost.dataset.id = postId;
+profilePost.dataset.id = id;
 
 profilePosts.prepend(profilePost);
 
@@ -294,58 +237,24 @@ profileDeleteBtn.addEventListener("click", () => {
 
         const id = profilePost.dataset.id;
 
+        posts = posts.filter(post => post.id != id);
+
+        savePosts();
+
         document
             .querySelectorAll(`[data-id="${id}"]`)
             .forEach(p => p.remove());
 
-        localStorage.setItem(
-            "profilePosts",
-            profilePosts.innerHTML
-        );
     }
+
 });
 
 
 
-localStorage.setItem(
-    "profilePosts",
-    profilePosts.innerHTML
-);
+savePosts();
 }
 
 
-
-function attachEvents() {
-
-    document.querySelectorAll(".delete-btn").forEach(btn => {
-
-btn.onclick = () => {
-
-    const post = btn.closest(".post");
-    const id = post.dataset.id;
-
-    if(confirm("この投稿を削除しますか？")) {
-
-        document
-            .querySelectorAll(`[data-id="${id}"]`)
-            .forEach(p => p.remove());
-
-        localStorage.setItem(
-            "posts",
-            posts.innerHTML
-        );
-
-        localStorage.setItem(
-            "profilePosts",
-            profilePosts.innerHTML
-        );
-    }
-
-};
-
-    });
-
-}
 postBtn.addEventListener("click",()=>{
 
     if(
@@ -388,15 +297,109 @@ postBtn.addEventListener("click",()=>{
 imagePreview.innerHTML = "";
 });
 
+
+function generateStats(){
+
+    let likes;
+
+    const chance = Math.random();
+
+    if(chance < 0.50){
+        likes = random(0, Math.max(1, Math.floor(followers*0.1)));
+    }else if(chance < 0.80){
+        likes = random(
+            Math.floor(followers*0.1),
+            Math.floor(followers*0.5)
+        );
+    }else if(chance < 0.95){
+        likes = random(
+            Math.floor(followers*0.5),
+            Math.floor(followers*2)
+        );
+    }else if(chance < 0.99){
+        likes = random(
+            Math.floor(followers*2),
+            Math.floor(followers*5)
+        );
+    }else{
+        likes = random(
+            Math.floor(followers*10),
+            Math.floor(followers*50)
+        );
+    }
+
+    let rts;
+    let replies;
+
+    if(likes < 10){
+        rts = random(0,2);
+        replies = random(0,1);
+    }else if(likes < 100){
+        rts = random(
+            Math.floor(likes*0.03),
+            Math.floor(likes*0.1)
+        );
+        replies = random(
+            Math.floor(likes*0.02),
+            Math.floor(likes*0.08)
+        );
+    }else if(likes < 1000){
+        rts = random(
+            Math.floor(likes*0.05),
+            Math.floor(likes*0.15)
+        );
+        replies = random(
+            Math.floor(likes*0.03),
+            Math.floor(likes*0.1)
+        );
+    }else{
+        rts = random(
+            Math.floor(likes*0.08),
+            Math.floor(likes*0.2)
+        );
+        replies = random(
+            Math.floor(likes*0.05),
+            Math.floor(likes*0.15)
+        );
+    }
+
+    return {
+        likes,
+        rts,
+        replies
+    };
+
+}
+
+
 function finishPost(images){
 
-    createPost(
-        tweetInput.value,
-        images
-    );
+    const stats = generateStats();
+
+const newPost = {
+    id: Date.now(),
+    content: tweetInput.value,
+    images,
+    likes: stats.likes,
+    rts: stats.rts,
+    replies: stats.replies,
+
+    name: nameInput.value,
+    userId: idInput.value,
+    icon: profileIcon.src
+};
+
+    posts.unshift(newPost);
+
+    savePosts();
+
+    createPost(newPost);
+
 
 let gain;
 const chance = Math.random();
+
+
 
 if (chance < 0.50) {
     // 50%
@@ -507,13 +510,7 @@ headerUpload.addEventListener("change",e=>{
 
     reader.readAsDataURL(file);
 });
-const savedProfilePosts =
-localStorage.getItem("profilePosts");
 
-if(savedProfilePosts){
-    profilePosts.innerHTML =
-    savedProfilePosts;
-}
 
 function saveProfile() {
     const profile = {
@@ -528,8 +525,29 @@ function saveProfile() {
         "profile",
         JSON.stringify(profile)
     );
+    posts.forEach(post => {
+    post.name = nameInput.value;
+    post.userId = idInput.value;
+    post.icon = profileIcon.src;
+});
+
+savePosts();
+
+postsContainer.innerHTML = "";
+profilePosts.innerHTML = "";
+
+posts.forEach(post=>{
+    createPost(post);
+});
+
 }
 
-nameInput.addEventListener("input", saveProfile);
+const postsContainer = document.getElementById("posts");
+
+profilePosts.innerHTML = "";
+
+posts.forEach(post => {
+    createPost(post);
+});nameInput.addEventListener("input", saveProfile);
 idInput.addEventListener("input", saveProfile);
 bioInput.addEventListener("input", saveProfile);

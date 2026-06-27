@@ -116,24 +116,95 @@ function random(min,max){
 
 function createPost(content, images){
 
-    let likes = random(
-        Math.floor(followers * 0.2),
-        Math.floor(followers * 2)
+// ===== いいね数 =====
+let likes;
+const likeChance = Math.random();
+
+if (likeChance < 0.50) {
+    // 50%
+    likes = random(
+        0,
+        Math.max(1, Math.floor(followers * 0.1))
     );
 
-    if(Math.random() < 0.03){
-        likes *= random(5,15);
-    }
+} else if (likeChance < 0.80) {
+    // 30%
+    likes = random(
+        Math.max(1, Math.floor(followers * 0.1)),
+        Math.max(2, Math.floor(followers * 0.5))
+    );
 
-    const rts = random(
+} else if (likeChance < 0.95) {
+    // 15%
+    likes = random(
+        Math.max(2, Math.floor(followers * 0.5)),
+        Math.max(5, Math.floor(followers * 2))
+    );
+
+} else if (likeChance < 0.99) {
+    // 4%
+    likes = random(
+        Math.max(5, Math.floor(followers * 2)),
+        Math.max(10, Math.floor(followers * 5))
+    );
+
+} else {
+    // 1% バズ
+    likes = random(
+        Math.max(100, Math.floor(followers * 10)),
+        Math.max(500, Math.floor(followers * 50))
+    );
+}
+
+// ===== RT数 =====
+let rts;
+
+if (likes < 10) {
+    rts = random(0, 2);
+
+} else if (likes < 100) {
+    rts = random(
+        Math.floor(likes * 0.03),
+        Math.floor(likes * 0.10)
+    );
+
+} else if (likes < 1000) {
+    rts = random(
         Math.floor(likes * 0.05),
-        Math.floor(likes * 0.3)
+        Math.floor(likes * 0.15)
     );
 
-    const replies = random(
-        Math.floor(likes * 0.01),
-        Math.floor(likes * 0.1)
+} else {
+    rts = random(
+        Math.floor(likes * 0.08),
+        Math.floor(likes * 0.20)
     );
+}
+
+// ===== コメント数 =====
+let replies;
+
+if (likes < 10) {
+    replies = random(0, 1);
+
+} else if (likes < 100) {
+    replies = random(
+        Math.floor(likes * 0.02),
+        Math.floor(likes * 0.08)
+    );
+
+} else if (likes < 1000) {
+    replies = random(
+        Math.floor(likes * 0.03),
+        Math.floor(likes * 0.10)
+    );
+
+} else {
+    replies = random(
+        Math.floor(likes * 0.05),
+        Math.floor(likes * 0.15)
+    );
+}
 
 const post = document.createElement("div");
 post.className = "post";
@@ -324,17 +395,30 @@ function finishPost(images){
         images
     );
 
-let gain = random(1,75);
+let gain;
+const chance = Math.random();
 
-if(Math.random() < 0.05){
-    gain += random(5,15);
+if (chance < 0.50) {
+    // 50%
+    gain = 0;
+} else if (chance < 0.80) {
+    // 30%
+    gain = random(1, 5);
+} else if (chance < 0.95) {
+    // 15%
+    gain = random(6, 20);
+} else if (chance < 0.99) {
+// 4%
+    gain = random(21, 100);
+} else {
+    // 1%
+    gain = random(500, 5000);
 }
 
 followers += gain;
+saveFollowers();
 
 
-
-    saveFollowers();
 
     addNotification(
         `<img src="images/followers.png" class="notice-icon">

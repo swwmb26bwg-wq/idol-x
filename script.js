@@ -137,6 +137,7 @@ function createPost(postData){
 
 const {
     id,
+    date,
     content,
     images,
     likes,
@@ -164,8 +165,11 @@ post.dataset.id = id;
     
 <div style="flex:1;" class="post-user">
 
-<span class="post-name">${name}</span>
-<span class="post-id">${userId}</span>
+<div class="user-line">
+    <span class="post-name">${name}</span>
+    <span class="post-id">${userId}</span>
+<span class="post-date"> · ${formatDate(date || id)}</span>
+</div>
 
 </div>
 
@@ -383,6 +387,8 @@ function finishPost(images){
 
 const newPost = {
     id: Date.now(),
+    date: new Date().toISOString(),
+
     content: tweetInput.value,
     images,
     likes: stats.likes,
@@ -404,23 +410,33 @@ const newPost = {
 let gain;
 const chance = Math.random();
 
-
-
 if (chance < 0.50) {
     // 50%
     gain = 0;
+
 } else if (chance < 0.80) {
     // 30%
     gain = random(1, 5);
-} else if (chance < 0.95) {
-    // 15%
-    gain = random(6, 20);
-} else if (chance < 0.99) {
-// 4%
-    gain = random(21, 100);
-} else {
+
+} else if (chance < 0.97) {
+    // 17%
+    gain = random(6, 10);
+
+} else if (chance < 0.98) {
     // 1%
-    gain = random(500, 5000);
+    gain = random(11, 20);
+
+} else if (chance < 0.99) {
+    // 1%
+    gain = random(21, 100);
+
+} else if (chance < 0.9985) {
+    // 0.85%
+    gain = random(101, 500);
+
+} else {
+    // 0.15%
+    gain = random(501, 2000);
 }
 
 followers += gain;
@@ -542,6 +558,34 @@ savePosts();
 
 }
 
+
+function formatDate(date){
+
+    if(!date) return "";
+
+    const d = new Date(date);
+
+    const now = new Date();
+
+    const diff = now - d;
+
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+
+    if(minutes < 1){
+        return "たった今";
+    }
+
+    if(minutes < 60){
+        return `${minutes}分前`;
+    }
+
+    if(hours < 24){
+        return `${hours}時間前`;
+    }
+
+    return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;
+}
 
 
 profilePosts.innerHTML = "";

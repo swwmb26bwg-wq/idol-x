@@ -363,3 +363,35 @@ body{
 #toast.show{
     opacity:1;
 }
+
+
+.post-date{
+    color:#777;
+    font-size:13px;
+}
+
+.user-line{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.post-name{
+    font-weight:bold;
+}
+
+.post-id,
+.post-date{
+    color:#777;
+    font-size:14px;
+}
+
+.post-content{
+    margin-top:10px;
+}
+
+.post-stats{
+    display:flex;
+    justify-content:space-around;
+    margin-top:15px;
+}

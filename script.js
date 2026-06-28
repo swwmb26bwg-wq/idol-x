@@ -30,6 +30,8 @@ let posts =
 JSON.parse(localStorage.getItem("posts")) || [];
 
 
+const postsContainer = document.getElementById("posts");
+
 const profilePosts =
 document.getElementById("profilePosts");
 
@@ -211,7 +213,7 @@ deleteBtn.addEventListener("click", () => {
 
 posts = posts.filter(post => post.id != id);
 
-savePosts();
+
 
 document
     .querySelectorAll(`[data-id="${id}"]`)
@@ -226,7 +228,11 @@ document
 const profilePost = post.cloneNode(true);
 profilePost.dataset.id = id;
 
+
+
 profilePosts.prepend(profilePost);
+
+
 
 const profileDeleteBtn =
     profilePost.querySelector(".delete-btn");
@@ -251,7 +257,6 @@ profileDeleteBtn.addEventListener("click", () => {
 
 
 
-savePosts();
 }
 
 
@@ -533,21 +538,20 @@ function saveProfile() {
 
 savePosts();
 
-postsContainer.innerHTML = "";
-profilePosts.innerHTML = "";
 
-posts.forEach(post=>{
-    createPost(post);
-});
 
 }
 
-const postsContainer = document.getElementById("posts");
+
 
 profilePosts.innerHTML = "";
 
-posts.forEach(post => {
+posts.sort((a,b)=> b.id - a.id);
+
+posts.slice().reverse().forEach(post => {
     createPost(post);
-});nameInput.addEventListener("input", saveProfile);
+});
+
+nameInput.addEventListener("input", saveProfile);
 idInput.addEventListener("input", saveProfile);
 bioInput.addEventListener("input", saveProfile);
